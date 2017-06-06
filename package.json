@@ -1,0 +1,43 @@
+{
+  "name": "guld-app",
+  "version": "0.2.0",
+  "description": "Guld app, filling in the gaps in the blocktree",
+  "main": "lib/gapp.js",
+  "scripts": {
+    "test": "mocha test",
+    "test-attended": "npm run build && export GNUPGHOME=\"$(mktemp -d)\" && mocha test-attended && mocha test",
+    "build": "babel src --out-dir lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isysd/guld-app.git"
+  },
+  "keywords": [
+    "guld",
+    "app",
+    "git",
+    "gpg",
+    "identity",
+    "blocktree"
+  ],
+  "author": "Ira Miller <public@iramiller.com> (https://iramiller.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isysd/guld-app/issues"
+  },
+  "homepage": "https://github.com/isysd/guld-app#readme",
+  "dependencies": {
+    "fs-extra": "^3.0.1",
+    "gpg": "^0.6.0",
+    "github": "*",
+    "bluebird": "*"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^3.19.0",
+    "tmp": "0.0.31"
+  }
+}

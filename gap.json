@@ -1,0 +1,17 @@
+{
+  "name":"tech-js-gapp",
+  "path": "/tech/js/gapp",
+  "version": "0.1.0",
+  "definition": "Guld app, filling in the gaps in the blocktree.",
+  "observer": "isysd",
+  "dependencies": [
+    "/tech/git",
+    "/tech/gpg",
+    "/tech/js/gapp"
+  ],
+  "stylesheets": [
+    "tech/js/tether/dist/css/tether.css",
+    "tech/js/bootswatch/slate/bootstrap.css"
+  ],
+  "main": "guld.js"
+}
