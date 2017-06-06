@@ -6,12 +6,11 @@
   "observer": "isysd",
   "dependencies": [
     "/tech/git",
-    "/tech/gpg",
-    "/tech/js/gapp"
+    "/tech/gpg"
+    "/tech/js/fs-extra",
+    "/tech/js/node-gpg",
+    "/tech/js/node-github",
+    "/tech/js/bluebird"
   ],
-  "stylesheets": [
-    "tech/js/tether/dist/css/tether.css",
-    "tech/js/bootswatch/slate/bootstrap.css"
-  ],
-  "main": "guld.js"
+  "main": "lib/gapp.js"
 }
