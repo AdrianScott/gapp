@@ -46,8 +46,6 @@ module.exports.createGHToken = (creds) => {
   })
 }
 
-
-
 module.exports.loadGHConf = () => {
   return new Promise(function (resolve, reject) {
     fs.readFile(confPath).then((lines) => {

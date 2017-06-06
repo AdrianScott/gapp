@@ -5,9 +5,10 @@ const homedir = os.homedir()
 const Promise = require('bluebird')
 const fs = require('fs-extra')
 const gitconfig = require('gitconfig')
+const git = require('./git')
 
 function setupPerspective (username, pass, email, fingerprint) {
-  gitcfgget()
+  git.cfgget()
     .then((config) => {
       if (config && config.user && config.user.username) {
         if (config.user.signingkey && (!config.commit.gpgsign || config.user.signingkey.length < 12))
@@ -21,16 +22,16 @@ function setupPerspective (username, pass, email, fingerprint) {
 class Perspective {
   constructor(perspective) {
     if (perspective) {
-      this.perspective = perspective
-      process.chdir(this.perspective)
+      this.path = perspective
+      process.chdir(this.path)
     }
-    self = this
-    gitcfgget()
+    var self = this
+    git.cfgget()
       .then((config) => {
         if (config && config.user && config.user.username) {
-          if (!self.perspective) {
-            self.perspective = path.join(os.homedir(), config.user.username)
-            process.chdir(self.perspective)
+          if (!self.path) {
+            self.path = path.join(os.homedir(), config.user.username)
+            process.chdir(self.path)
           }
           self.name = config.user.username
           self.email = config.user.email
@@ -40,9 +41,9 @@ class Perspective {
   }
 
   loadPerspective() {
-    fs.access(this.perspective)
+    fs.access(this.path)
       .catch((err) => {
-        fs.mkdir(this.perspective).then(chdir)
+        fs.mkdir(this.path).then(chdir)
       }).then(chdir)
   }
 }
@@ -66,4 +67,4 @@ class Perspective {
 //   }
 // }
 
-// module.exports = {'Gapp': Gapp, 'Perspective': Perspective, 'listSecretKeys': listSecretKeys}
+module.exports = {'setupPerspective': setupPerspective, 'Perspective': Perspective}
