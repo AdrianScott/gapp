@@ -1,6 +1,6 @@
 const gpg = require('gpg')
 
-module.exports = {}
+module.exports = {gpg: gpg}
 
 module.exports.listSecretKeys = (term) => {
   return new Promise((resolve, reject) => {
@@ -36,12 +36,8 @@ module.exports.getFingerprint = (term) => {
   })
 }
 
-module.exports.genKey = (args) => {
-  if (args.hasOwnProperty('description')) args['description'] = ' ' + args['description']
-  else args['description'] = ''
-  if (args.hasOwnProperty('passphrase')) args['passphrase'] = ' ' + args['passphrase']
-  else args['passphrase'] = ''
-  var options = `${args.name} <${args.email}>`
+module.exports.genKey = (name, email) => {
+  var options = `${name} <${email}>`
   return new Promise((resolve, reject) => {
     var opta = ['--batch', '--quick-gen-key', options]
     gpg.call('', opta, (err, data) => {
