@@ -39,6 +39,7 @@ Initialization is a complex process, behind the scenes.
 6. Encrypt token and store in `~/blocktree/config.json`
 7. add `~/blocktree/.gitignore` with `config.json*`
 8. Commit all of the above.
+9. Push to your github
 
 From code, initialization is quite easy, at least in theory.
 
