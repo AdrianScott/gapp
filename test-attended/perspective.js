@@ -9,12 +9,12 @@ var confPath = path.join(os.homedir(), 'blocktree', 'ghconfig.json')
 
 describe('perspective', function () {
   describe('config', function () {
-    this.timeout(10000)
+    this.timeout(50000)
     it('load and save an encrypted config file', function (done) {
       gitconfig.get({
         location: 'global'
       }).then((config) => {
-        Perspective.init(config.user.username, 'github pass', config.user.email, config.user.signingkey)
+        Perspective.init(config.user.username, 'ghpass', config.user.email, config.user.signingkey).then(done)
       })
     })
   })

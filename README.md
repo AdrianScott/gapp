@@ -24,7 +24,7 @@ npm run build
 
 ``` javascript
 const gapp = require('gapp')
-var perspective = new gapp.Perspective()
+var perspective = new gapp.perspective.Perspective()
 ```
 
 ##### Initialize
@@ -44,7 +44,7 @@ From code, initialization is quite easy, at least in theory.
 
 ``` javascript
 const gapp = require('gapp')
-var Perspective.init(
+gapp.perspective.Perspective.init(
   github_username,
   github_password,
   email,

@@ -7,6 +7,7 @@ const gpg = require('./gpg.js')
 var confPath = path.join(os.homedir(), 'blocktree', 'ghconfig.json')
 
 module.exports.createGHToken = (creds) => {
+  console.log('creating gh token')
   return new Promise(function (resolve, reject) {
     var github = module.exports.getGithub()
     github.authenticate({
@@ -36,7 +37,7 @@ module.exports.getGithub = (cfg, token) => {
   cfg.pathPrefix = cfg.pathPrefix || ''
   cfg.Promise = cfg.Promise || Promise
   cfg.followRedirects = cfg.followRedirects || false
-  cfg.timeout = cfg.timeout || 100000
+  cfg.timeout = cfg.timeout || 5000
   var github = new GitHubApi(cfg)
   if (token) {
     github.authenticate({
