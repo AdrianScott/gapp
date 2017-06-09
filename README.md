@@ -41,16 +41,23 @@ Initialization is a complex process, behind the scenes.
 8. Commit all of the above.
 9. Push to your github
 
-From code, initialization is quite easy, at least in theory.
+From code, initialization is broken into two steps. This is because the key generation step can take quite some time. So, we first gather then info, then show the user a placebo VR game to generate some entropy.
 
 ``` javascript
 const gapp = require('gapp')
-gapp.perspective.Perspective.init(
+gapp.perspective.Perspective.startInit(
   github_username,
   github_password,
   email,
   fingerprint
-)
+).then(() => {
+  gapp.perspective.Perspective.finishInit(
+    github_username,
+    github_password,
+    email,
+    fingerprint
+  )
+})
 ```
 
 ### Config file

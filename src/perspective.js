@@ -93,7 +93,11 @@ module.exports = class Perspective {
         .then(Promise.resolve)
       })
     }
-    return fs.mkdirs(GULDHOME).then(initDirs)
+    return new Promise(function(resolve, reject) {
+      fs.access(GULDHOME).catch((err) => {
+        fs.mkdirs(GULDHOME).then(initDirs)
+      }).then(resolve)
+    })
   }
 
   static finishInit(username, pass, email, fingerprint) {
@@ -118,11 +122,15 @@ module.exports = class Perspective {
     var addKey = (fingerprint) => {
       gitCfg['user.signingkey'] = fingerprint
       gitconfig.set(gitCfg, {location: 'global'})
-      return fs.writeFile('life/' + username + '/gap.json', JSON.stringify({
-          'name': username,
-          'fingerprint': fingerprint,
-          'observer': username
-        }, null, 2))
+      return new Promise(function(resolve, reject) {
+        fs.access('life/' + username + '/gap.json').catch((err) => {
+          fs.writeFile('life/' + username + '/gap.json', JSON.stringify({
+              'name': username,
+              'fingerprint': fingerprint,
+              'observer': username
+            }, null, 2))
+        })
+      })
     }
     return getFingSafe()
     .then(addKey)
@@ -131,30 +139,35 @@ module.exports = class Perspective {
         if (err) reject(err)
         else {
           var keypath = path.join('keys', 'pgp', username + '.asc')
-          fs.mkdirs(path.join(GULDHOME, 'keys', 'pgp'))
-          .then(fs.writeFile(path.join(GULDHOME, keypath), data.toString('utf-8'))).then(() => {
-            git.add('./*')
-            github.createGHToken({username: username, password: pass})
-            .then((token) => {
-              Perspective.saveConfig({'githubOAUTH': token}, fingerprint).then(() => {
-                var myGH = github.getGithub({}, token)
-                myGH.repos.create({
-                  'name': username,
-                  'description': 'Blocktree perspective of ' + username,
-                  'private': false,
-                  'has_issues': false,
-                  'has_projects': false,
-                  'has_wiki': false
-                }).then(() => {
-                  // TODO use SSH instead of this netrc + OAUTH crap
-                  var netrc = require('netrc')
-                  var myNetrc = netrc()
-                  myNetrc['github.com'] = {'login': username, 'password': token}
-                  netrc.save(myNetrc)
-                  git.addRemote(username, 'https://github.com/' + username + '/' + username + '.git')
-                  .checkoutLocalBranch(username)
-                  .commit('Initialize perspective for ' + username)
-                  .push(username, username, ['-f']).then(resolve)
+          fs.access(keypath).catch((err) => {
+            fs.mkdirs(path.join(GULDHOME, 'keys', 'pgp'))
+            .then(fs.writeFile(path.normalize(path.join(GULDHOME, keypath)), data.toString('utf-8')))
+          }).then(() => {
+            Perspective.loadConfig(fingerprint).then(resolve)
+            .catch((err) => {
+              git.add('./*')
+              github.createGHToken({username: username, password: pass})
+              .then((token) => {
+                Perspective.saveConfig({'githubOAUTH': token}, fingerprint).then(() => {
+                  var myGH = github.getGithub({}, token)
+                  myGH.repos.create({
+                    'name': username,
+                    'description': 'Blocktree perspective of ' + username,
+                    'private': false,
+                    'has_issues': false,
+                    'has_projects': false,
+                    'has_wiki': false
+                  }).then(() => {
+                    // TODO use SSH instead of this netrc + OAUTH crap
+                    var netrc = require('netrc')
+                    var myNetrc = netrc()
+                    myNetrc['github.com'] = {'login': username, 'password': token}
+                    netrc.save(myNetrc)
+                    git.addRemote(username, 'https://github.com/' + username + '/' + username + '.git')
+                    .checkoutLocalBranch(username)
+                    .commit('Initialize perspective for ' + username)
+                    .push(username, username, ['-f']).then(resolve)
+                  })
                 })
               })
             })
