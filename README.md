@@ -36,8 +36,8 @@ Initialization is a complex process, behind the scenes.
 3. import or generate PGP key
 4. export PGP public key to `~/blocktree/keys/pgp/${name}.asc`
 5. log user into github once, to generate re-usable OAUTH token
-6. Encrypt token and store in `~/blocktree/config.json`
-7. add `~/blocktree/.gitignore` with `config.json*`
+6. Create `~/blocktree/.gitignore` with `config.json*`
+7. Encrypt token and store in `~/blocktree/config.json`
 8. Commit all of the above.
 9. Push to your github
 
